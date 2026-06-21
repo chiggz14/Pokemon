@@ -77,18 +77,15 @@ if selected_generations:
 if pokemon_input:
     names_list = []
 
-    # Split input by line
-    lines = pokemon_input.split("\n")
+    # Replace newline with colon for unified parsing
+    raw_items = pokemon_input.replace("\n", ":")
 
-    for line in lines:
-        if ":" in line:
-            # Take text after colon
-            name = line.split(":", 1)[1].strip()
-            if name:
-                names_list.append(name)
+    for item in raw_items.split(":"):
+        item = item.strip()
+        if item and not item.lower().startswith("name"):
+            names_list.append(item)
 
     if names_list:
-        # Create regex pattern for partial matching
         pattern = "|".join(names_list)
 
         filtered_df = filtered_df[
