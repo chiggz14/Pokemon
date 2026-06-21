@@ -44,11 +44,11 @@ selected_generations = st.sidebar.multiselect(
     options=generation_values
 )
 
-# ---- POKEMON NAME INPUT
-st.sidebar.subheader("Filter by Pokemon Names")
+# ---- POKEMON EXCLUDE FILTER (PARTIAL MATCH)
+st.sidebar.subheader("Exclude Pokemon")
 
 pokemon_input = st.sidebar.text_area(
-    "Enter Pokemon names (comma or new-line separated)"
+    "Exclude Pokemon (use ':' separator, supports partial match e.g. 'char:pika')"
 )
 
 # -------------------------
@@ -56,7 +56,7 @@ pokemon_input = st.sidebar.text_area(
 # -------------------------
 filtered_df = df.copy()
 
-# ---- TYPE FILTER (AND logic across Type1 + Type2)
+# ---- TYPE FILTER (AND logic)
 if selected_types:
     filtered_df = filtered_df[
         filtered_df.apply(
@@ -73,20 +73,23 @@ if selected_generations:
         filtered_df["Generation"].isin(selected_generations)
     ]
 
-# ---- POKEMON NAME EXCLUDE FILTER
+# ---- POKEMON EXCLUDE FILTER (PARTIAL MATCH)
 if pokemon_input:
-    # Split using ":" delimiter
+    # Split using ":" and clean input
     names_list = [
         name.strip()
         for name in pokemon_input.split(":")
         if name.strip()
     ]
 
-    filtered_df = filtered_df[
-        ~filtered_df["Pokemon"].str.lower().isin(
-            [name.lower() for name in names_list]
-        )
-    ]
+    if names_list:
+        # Create regex pattern for partial matching
+        pattern = "|".join(names_list)
+
+        # Exclude matches
+        filtered_df = filtered_df[
+            ~filtered_df["Pokemon"].str.contains(pattern, case=False, na=False)
+        ]
 
 # -------------------------
 # DISPLAY DATA
@@ -98,7 +101,7 @@ st.dataframe(filtered_df, use_container_width=True)
 st.write(f"Showing {len(filtered_df)} rows")
 
 # -------------------------
-# ACTIVE FILTER DISPLAY
+# ACTIVE FILTERS DISPLAY
 # -------------------------
 st.markdown("### Active Filters")
 
@@ -113,6 +116,6 @@ else:
     st.write("Generation: All")
 
 if pokemon_input:
-    st.write(f"Pokemon filter applied ({len(names_list)} names)")
+    st.write(f"Excluded patterns: {pokemon_input}")
 else:
-    st.write("Pokemon: All")
+    st.write("Pokemon: None excluded")
