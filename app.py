@@ -12,7 +12,7 @@ st.title("📊 Pokemon Dashboard")
 # -----------------------------
 @st.cache_data
 def load_data():
-    df = pd.read_excel("Pokemon.xlsx")
+    df = pd.read_excel("pokemon.csv")
     
     # Create combined type column
     df["Type Combined"] = df["Type1"].fillna('') + " / " + df["Type2"].fillna('')
