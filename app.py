@@ -128,8 +128,17 @@ else:
 # -------------------------
 st.subheader("Filtered Pokemon List (Copy Friendly)")
 
+# Get list of Pokemon names
 pokemon_list = filtered_df["Pokemon"].dropna().tolist()
+
+# Convert to newline-separated string
 pokemon_text = "\n".join(pokemon_list)
 
-components.html(copy_button_html, height=50)
+# Display in text area for easy copy
+st.text_area(
+    "Copy this list:",
+    value=pokemon_text,
+    height=250
+)
+
 
