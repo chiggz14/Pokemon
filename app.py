@@ -73,16 +73,17 @@ if selected_generations:
         filtered_df["Generation"].isin(selected_generations)
     ]
 
-# ---- POKEMON NAME FILTER
+# ---- POKEMON NAME EXCLUDE FILTER
 if pokemon_input:
+    # Split using ":" delimiter
     names_list = [
         name.strip()
-        for name in pokemon_input.replace("\n", ",").split(",")
+        for name in pokemon_input.split(":")
         if name.strip()
     ]
 
     filtered_df = filtered_df[
-        filtered_df["Pokemon"].str.lower().isin(
+        ~filtered_df["Pokemon"].str.lower().isin(
             [name.lower() for name in names_list]
         )
     ]
