@@ -131,12 +131,5 @@ st.subheader("Filtered Pokemon List (Copy Friendly)")
 pokemon_list = filtered_df["Pokemon"].dropna().tolist()
 pokemon_text = "\n".join(pokemon_list)
 
-# Show text area (still useful)
-st.text_area(
-    "Copy manually:",
-    value=pokemon_text,
-    height=200
-)
-
 components.html(copy_button_html, height=50)
 
