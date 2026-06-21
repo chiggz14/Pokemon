@@ -64,3 +64,54 @@ if selected_types:
                 t in [row["Type1"], row["Type2"]] for t in selected_types
             ),
             axis=1
+        )
+    ]
+
+# ---- GENERATION FILTER
+if selected_generations:
+    filtered_df = filtered_df[
+        filtered_df["Generation"].isin(selected_generations)
+    ]
+
+# ---- POKEMON NAME FILTER
+if pokemon_input:
+    names_list = [
+        name.strip()
+        for name in pokemon_input.replace("\n", ",").split(",")
+        if name.strip()
+    ]
+
+    filtered_df = filtered_df[
+        filtered_df["Pokemon"].str.lower().isin(
+            [name.lower() for name in names_list]
+        )
+    ]
+
+# -------------------------
+# DISPLAY DATA
+# -------------------------
+st.subheader("Pokemon Data")
+
+st.dataframe(filtered_df, use_container_width=True)
+
+st.write(f"Showing {len(filtered_df)} rows")
+
+# -------------------------
+# ACTIVE FILTER DISPLAY
+# -------------------------
+st.markdown("### Active Filters")
+
+if selected_types:
+    st.write(f"Types: {', '.join(selected_types)}")
+else:
+    st.write("Types: All")
+
+if selected_generations:
+    st.write(f"Generation: {', '.join(map(str, selected_generations))}")
+else:
+    st.write("Generation: All")
+
+if pokemon_input:
+    st.write(f"Pokemon filter applied ({len(names_list)} names)")
+else:
+    st.write("Pokemon: All")
