@@ -39,17 +39,16 @@ selected_types = st.sidebar.multiselect(
 # -------------------------
 # APPLY FILTER (STRICT AND LOGIC)
 # -------------------------
+# -------------------------
+# APPLY FILTER (STRICT DUAL MATCH)
+# -------------------------
 filtered_df = df.copy()
 
 if selected_types:
-    filtered_df = df[
-        df.apply(
-            lambda row: all(
-                t in [row["Type1"], row["Type2"]] for t in selected_types
-            ),
-            axis=1
-        )
-    ]
+    for t in selected_types:
+        filtered_df = filtered_df[
+            filtered_df["Type Combined"].str.contains(t, case=False, na=False)
+        ]
 
 # -------------------------
 # DISPLAY DATA
