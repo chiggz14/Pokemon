@@ -12,21 +12,25 @@ st.title("📊 Pokemon Dashboard")
 @st.cache_data
 def load_data():
     df = pd.read_csv("pokemon.csv")
+    
+    # Create Type Combined column
+    df["Type Combined"] = df["Type1"].fillna('') + " / " + df["Type2"].fillna('')
+    df["Type Combined"] = df["Type Combined"].str.replace(" / $", "", regex=True)
+    
     return df
 
 df = load_data()
 
 # -------------------------
-# TYPE1 FILTER (BUTTON STYLE)
+# FILTER (Type1 values → Type Combined logic)
 # -------------------------
-st.sidebar.subheader("Filter by Type1")
+st.sidebar.subheader("Filter by Type")
 
-# Get unique values
+# Unique Type1 values (buttons source)
 type1_values = sorted(df["Type1"].dropna().unique())
 
-# Create radio (button-like selector)
 selected_type = st.sidebar.radio(
-    "Select Type1",
+    "Select Type",
     options=["All"] + list(type1_values)
 )
 
@@ -36,10 +40,12 @@ selected_type = st.sidebar.radio(
 filtered_df = df.copy()
 
 if selected_type != "All":
-    filtered_df = filtered_df[filtered_df["Type1"] == selected_type]
+    filtered_df = filtered_df[
+        filtered_df["Type Combined"].str.contains(selected_type, case=False, na=False)
+    ]
 
 # -------------------------
-# DISPLAY DATA
+# DISPLAY
 # -------------------------
 st.subheader("Pokemon Data")
 st.dataframe(filtered_df)
