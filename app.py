@@ -73,20 +73,24 @@ if selected_generations:
         filtered_df["Generation"].isin(selected_generations)
     ]
 
-# ---- POKEMON EXCLUDE FILTER (PARTIAL MATCH)
+# ---- POKEMON EXCLUDE FILTER (STRUCTURED INPUT)
 if pokemon_input:
-    # Split using ":" and clean input
-    names_list = [
-        name.strip()
-        for name in pokemon_input.split(":")
-        if name.strip()
-    ]
+    names_list = []
+
+    # Split input by line
+    lines = pokemon_input.split("\n")
+
+    for line in lines:
+        if ":" in line:
+            # Take text after colon
+            name = line.split(":", 1)[1].strip()
+            if name:
+                names_list.append(name)
 
     if names_list:
         # Create regex pattern for partial matching
         pattern = "|".join(names_list)
 
-        # Exclude matches
         filtered_df = filtered_df[
             ~filtered_df["Pokemon"].str.contains(pattern, case=False, na=False)
         ]
