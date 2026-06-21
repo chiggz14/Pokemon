@@ -143,7 +143,16 @@ st.text_area(
 # -------------------------
 copy_button_html = f"""
 <textarea id="pokemonText" style="position:absolute; left:-9999px;">{pokemon_text}</textarea>
-<button onclick="
+
+<button style="
+    background-color:#4CAF50;
+    color:white;
+    padding:10px 16px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:14px;
+" onclick="
     const text = document.getElementById('pokemonText');
     text.select();
     document.execCommand('copy');
@@ -151,6 +160,7 @@ copy_button_html = f"""
 ">
     📋 Copy to Clipboard
 </button>
+"""
 """
 
 components.html(copy_button_html, height=50)
