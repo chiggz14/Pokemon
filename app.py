@@ -128,16 +128,30 @@ else:
 # -------------------------
 st.subheader("Filtered Pokemon List (Copy Friendly)")
 
-# Get list of Pokemon names
 pokemon_list = filtered_df["Pokemon"].dropna().tolist()
-
-# Convert to newline-separated string
 pokemon_text = "\n".join(pokemon_list)
 
-# Display in text area for easy copy
+# Show text area (still useful)
 st.text_area(
-    "Copy this list:",
+    "Copy manually:",
     value=pokemon_text,
-    height=250
+    height=200
 )
+
+# -------------------------
+# COPY BUTTON (JS)
+# -------------------------
+copy_button_html = f"""
+<textarea id="pokemonText" style="position:absolute; left:-9999px;">{pokemon_text}</textarea>
+<button onclick="
+    const text = document.getElementById('pokemonText');
+    text.select();
+    document.execCommand('copy');
+    alert('Copied to clipboard!');
+">
+    📋 Copy to Clipboard
+</button>
+"""
+
+components.html(copy_button_html, height=50)
 
