@@ -49,7 +49,9 @@ selected_generations = st.sidebar.multiselect(
 # -------------------------
 filtered_df = df.copy()
 
-# Type filter (AND logic using Type1 + Type2)
+# -------------------------
+# TYPE FILTER
+# -------------------------
 if selected_types:
     filtered_df = filtered_df[
         filtered_df.apply(
@@ -60,12 +62,29 @@ if selected_types:
         )
     ]
 
-# Generation filter
+# -------------------------
+# GENERATION FILTER
+# -------------------------
 if selected_generations:
     filtered_df = filtered_df[
         filtered_df["Generation"].isin(selected_generations)
     ]
 
+# -------------------------
+# POKEMON NAME FILTER
+# -------------------------
+if pokemon_input:
+    names_list = [
+        name.strip()
+        for name in pokemon_input.replace("\n", ",").split(",")
+        if name.strip()
+    ]
+
+    filtered_df = filtered_df[
+        filtered_df["Pokemon"].str.lower().isin(
+            [name.lower() for name in names_list]
+        )
+    ]
 # -------------------------
 # DISPLAY
 # -------------------------
