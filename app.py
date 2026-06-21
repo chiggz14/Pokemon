@@ -119,3 +119,25 @@ if pokemon_input:
     st.write(f"Excluded patterns: {pokemon_input}")
 else:
     st.write("Pokemon: None excluded")
+
+
+
+
+# -------------------------
+# COPYABLE LIST OUTPUT
+# -------------------------
+st.subheader("Filtered Pokemon List (Copy Friendly)")
+
+# Get list of Pokemon names
+pokemon_list = filtered_df["Pokemon"].dropna().tolist()
+
+# Convert to newline-separated string
+pokemon_text = "\n".join(pokemon_list)
+
+# Display in text area for easy copy
+st.text_area(
+    "Copy this list:",
+    value=pokemon_text,
+    height=250
+)
+
